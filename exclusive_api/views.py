@@ -1,8 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.views import APIView, Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from .models import Category, Product, User, PaymentInfo
-from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer
+from .models import Category, Product, User, PaymentInfo, Image
+from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer
 from django.shortcuts import get_object_or_404
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -20,6 +20,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class PaymentInfoViewSet(viewsets.ModelViewSet):
     queryset = PaymentInfo.objects.all()
     serializer_class = PaymentInfoSerializer
+
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
 
 class PaymentInfoApi(APIView):
     def get(self, request):
@@ -41,4 +45,48 @@ class PaymentInfoApi(APIView):
             payment_info.save()
             payment_info_serializer = PaymentInfoSerializer(payment_info, many=False)
             return Response(payment_info_serializer.data, status=HTTP_201_CREATED)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class ImageApi(APIView):
+    def get(self, request):
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def post(self, request):
+        product = get_object_or_404(Product, id=request.data['product_id'])
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            image = Image(
+                name=serializer.validated_data.get('name'),
+                image=serializer.validated_data.get('image'),
+                url=serializer.validated_data.get('url'),
+                product=product
+            )
+            image.save()
+            image_serializer = ImageSerializer(image, many=False)
+            return Response(image_serializer.data, status=HTTP_201_CREATED)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class ProductApi(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        print(serializer)
+        if serializer.is_valid():
+            product = Product(
+                name=serializer.validated_data.get('name'),
+                description=serializer.validated_data.get('description'),
+                price=serializer.validated_data.get('price'),
+                rating=serializer.validated_data.get('rating'),
+                size=serializer.validated_data.get('size'),
+                color=serializer.validated_data.get('color'),
+            )
+            product.save()
+            product_serializer = ProductSerializer(product, many=False)
+            return Response(product_serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

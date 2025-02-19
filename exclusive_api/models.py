@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 # Create your models here.
 
@@ -16,11 +17,29 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Descrição')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Preço')
     categories = models.ManyToManyField('Category', related_name='produtos', verbose_name='Categorias')
+    rating = models.DecimalField(max_digits=2, decimal_places=1, verbose_name='Avaliação', blank=True, default=None, null=True)
+    size = models.CharField(max_length=100, verbose_name='Tamanho', blank=True, default=None, null=True)
+    color = models.CharField(max_length=100, verbose_name='Cor', blank=True, default=None, null=True)
+
+    @property
+    def images(self):
+        return self.imagens.all()
+
     class Meta:
         ordering = ["id",]
 
     def __str__(self):
         return self.name
+
+class Image(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Nome', blank=True, default=None, null=True)
+    image = models.FileField(upload_to='products/', verbose_name='Imagem', blank=True, default=None, null=True)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='imagens', verbose_name='Produto', blank=False, default=None, null=False)
+    class Meta:
+        ordering = ["id",]
+
+    def __str__(self):
+        return f'{self.product.name} - {self.image}'
 
 class User(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nome')
