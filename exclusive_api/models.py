@@ -90,3 +90,14 @@ class Order(models.Model):
     def __str__(self):
 
         return self.user.name
+
+class WishList(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='wishlists', verbose_name='Usuário')
+    products = models.ManyToManyField('Product', related_name='wishlists', verbose_name='Produtos')
+
+
+    class Meta:
+        ordering = ["id", ]
+
+    def __str__(self):
+        return self.user.name

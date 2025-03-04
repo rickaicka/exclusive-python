@@ -1,6 +1,8 @@
+from itertools import product
+
 from django.contrib import admin
 from unicodedata import category
-from .models import Category, Product, User, PaymentInfo, Image
+from .models import Category, Product, User, PaymentInfo, Image, WishList
 
 
 class Categories(admin.ModelAdmin):
@@ -47,3 +49,17 @@ class PaymentInfos(admin.ModelAdmin):
     search_fields = ('user', 'card_number', 'card_holder', 'card_expiration_date', 'card_cvv')
     list_per_page = 20
 admin.site.register(PaymentInfo, PaymentInfos)
+
+class WishLists(admin.ModelAdmin):
+    def get_wishlist(self, obj):
+        prod = Product.objects.filter(wishlists=obj.id)
+        return ", ".join([product.name for product in prod])
+
+    get_wishlist.short_description = 'Produtos'
+    get_wishlist.admin_order_field = 'product'
+
+    list_display = ('id', 'user', 'get_wishlist')
+    list_display_links = ('id', 'user', 'get_wishlist')
+    search_fields = ('product',)
+    list_per_page = 20
+admin.site.register(WishList, WishLists)

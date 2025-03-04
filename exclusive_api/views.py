@@ -1,9 +1,14 @@
+from gc import get_objects
+from itertools import product
+
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView, Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from .models import Category, Product, User, PaymentInfo, Image
-from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer
+from .models import Category, Product, User, PaymentInfo, Image, WishList
+from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, WishListSerializer
 from django.shortcuts import get_object_or_404
+
+#VIEWSET ROUTES
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -24,6 +29,12 @@ class PaymentInfoViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+
+class WishListViewSet(viewsets.ModelViewSet):
+    queryset = WishList.objects.all()
+    serializer_class = WishListSerializer
+
+#API ROUTES
 
 class PaymentInfoApi(APIView):
     def get(self, request):
@@ -76,7 +87,6 @@ class ProductApi(APIView):
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             product = Product(
                 name=serializer.validated_data.get('name'),
@@ -89,4 +99,33 @@ class ProductApi(APIView):
             product.save()
             product_serializer = ProductSerializer(product, many=False)
             return Response(product_serializer.data, status=HTTP_201_CREATED)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class WishListApi(APIView):
+    def get(self, request):
+        wishlists = WishList.objects.all()
+        serializer = WishListSerializer(wishlists, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+    def post(self, request):
+        user = get_object_or_404(User, id=request.data['user_id'])
+        serializer = WishListSerializer(data=request.data)
+        if serializer.is_valid():
+            wishlist = WishList(
+                user=user,
+            )
+            wishlist.save()
+            wishlist_serializer = WishListSerializer(wishlist, many=False)
+            wishlist.products.set(request.data['products'])
+            for pd in request.data['products']:
+                product = get_object_or_404(Product, id=pd)
+                wishlist_serializer.data['products'].append(ProductSerializer(product).data)
+                prods=[]
+                for wls in wishlist_serializer.data['products']:
+                    if not isinstance(wls, int):
+                        prods.append(wls)
+                    else:
+                        wishlist_serializer.data['products'].remove(wls)
+            wishlist_serializer.data['products'] = prods
+            return Response(wishlist_serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
