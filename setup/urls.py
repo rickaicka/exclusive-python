@@ -10,11 +10,11 @@ from exclusive_api.views import (
 )
 from updater import views
 
-router = routers.DefaultRouter()
-router.register('categories', CategoryViewSet, basename='Category')
-router.register('products', ProductViewSet, basename='Product')
-router.register('users', UserViewSet, basename='User')
-router.register('images', ImageViewSet, basename='Image')
+# router = routers.DefaultRouter()
+# router.register('categories', CategoryViewSet, basename='Category')
+# router.register('products', ProductViewSet, basename='Product')
+# router.register('users', UserViewSet, basename='User')
+# router.register('images', ImageViewSet, basename='Image')
 # router.register('payment-infos/', PaymentInfoViewSet, basename='PaymentInfo')
 urlpatterns = [
     path('admin/', admin.site.urls),
