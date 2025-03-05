@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from gitpy import git
+from git import Repo
 @csrf_exempt
 def update(request):
     if request.method == "POST":
-        repo = git.Repo("ricardosalimd.pythonanywhere.com/")
+        repo = Repo("ricardosalimd.pythonanywhere.com/")
         origin = repo.remotes.origin
         origin.pull()
         return HttpResponse("Updated code on PythonAnywhere")

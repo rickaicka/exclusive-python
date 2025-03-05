@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'exclusive_api',
     'corsheaders',
-    'gitpy',
 ]
 
 MIDDLEWARE = [
