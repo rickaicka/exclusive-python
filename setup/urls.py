@@ -16,7 +16,7 @@ router.register('users', UserViewSet, basename='User')
 router.register('images', ImageViewSet, basename='Image')
 #router.register('payment_infos/', PaymentInfoViewSet, basename='PaymentInfo')
 
-# router.register('wish_list/', WishListViewSet, basename='WishList')
+router.register('wish_list/', WishListViewSet, basename='WishList')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
