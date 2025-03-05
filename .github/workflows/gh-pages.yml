@@ -18,4 +18,4 @@ jobs:
           host: 'www.pythonanywhere.com'
           username: 'ricardosalimd'
           api_token: 'edb0d1413f54a67a909ff7d5c88e06a59b27efb2'
-          domain_name: 'https://ricardosalimd.pythonanywhere.com/'
+          domain_name: 'https://ricardosalimd.pythonanywhere.com/exclusive-api'
