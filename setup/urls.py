@@ -10,14 +10,15 @@ from exclusive_api.views import (
     update
 )
 
-# router = routers.DefaultRouter()
-# router.register('categories', CategoryViewSet, basename='Category')
-# router.register('products', ProductViewSet, basename='Product')
-# router.register('users', UserViewSet, basename='User')
-# router.register('images', ImageViewSet, basename='Image')
-# #router.register('payment_infos/', PaymentInfoViewSet, basename='PaymentInfo')
-#
-# router.register('wish_list', WishListViewSet, basename='WishList')
+router = routers.DefaultRouter()
+router.register('categories', CategoryViewSet, basename='Category')
+router.register('products', ProductViewSet, basename='Product')
+router.register('users', UserViewSet, basename='User')
+router.register('images', ImageViewSet, basename='Image')
+#router.register('payment_infos/', PaymentInfoViewSet, basename='PaymentInfo')
+
+router.register('wish_list', WishListViewSet, basename='WishList')
+router.register('update_server', views.update, basename='UpdateServer')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
