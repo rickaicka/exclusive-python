@@ -10,18 +10,17 @@ from exclusive_api.views import (
 )
 from setup import views
 
-# router = routers.DefaultRouter()
-# router.register('categories', CategoryViewSet, basename='Category')
-# router.register('products', ProductViewSet, basename='Product')
-# router.register('users', UserViewSet, basename='User')
-# router.register('images', ImageViewSet, basename='Image')
-# # router.register('payment-infos/', PaymentInfoViewSet, basename='PaymentInfo')
-# router.register('update_server/', views.update, basename='update')
+router = routers.DefaultRouter()
+router.register('categories', CategoryViewSet, basename='Category')
+router.register('products', ProductViewSet, basename='Product')
+router.register('users', UserViewSet, basename='User')
+router.register('images', ImageViewSet, basename='Image')
+# router.register('payment-infos/', PaymentInfoViewSet, basename='PaymentInfo')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('payment-infos/', PaymentInfoApi.as_view(), name='payment-infos'),
     path('products/', ProductApi.as_view(), name='products'),
-    path('update_server', views.update, name='update'),
+    path('update_server/', views.update, name='update'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
