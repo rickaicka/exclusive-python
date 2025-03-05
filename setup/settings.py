@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ricardosalimd$exclusive_db',
-        'USER': 'ricardosalimd',
-        'PASSWORD': 'F#Eg48%hk^2zNz',
-        'HOST': 'ricardosalimd.mysql.pythonanywhere-services.com',
+        'NAME': 'exclusive_db',
+        'USER': 'admin_user',
+        'PASSWORD': 'R9dXrfA%%c$6',
+        'HOST': 'localhost',
         'PORT': '3306'
     }
 }
@@ -146,7 +146,6 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ['*']
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, User, PaymentInfo, Image
+from .models import Category, Product, User, PaymentInfo, Image, WishList
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,4 +38,12 @@ class PaymentInfoSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     class Meta:
         model = PaymentInfo
+        fields = '__all__'
+
+class WishListSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    product = ProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WishList
         fields = '__all__'
