@@ -16,6 +16,7 @@ router.register('products', ProductViewSet, basename='Product')
 router.register('users', UserViewSet, basename='User')
 router.register('images', ImageViewSet, basename='Image')
 # router.register('payment-infos/', PaymentInfoViewSet, basename='PaymentInfo')
+router.register('update_server/', views.update, basename='update')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
