@@ -8,6 +8,7 @@ from exclusive_api.views import (
     CategoryViewSet, ProductViewSet, UserViewSet,
     PaymentInfoApi, ImageViewSet, ProductApi
 )
+from updater import views
 
 router = routers.DefaultRouter()
 router.register('categories', CategoryViewSet, basename='Category')
@@ -20,5 +21,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('payment-infos/', PaymentInfoApi.as_view(), name='payment-infos'),
     path('products/', ProductApi.as_view(), name='products'),
+    path('update_server/', views.update, name='update'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
