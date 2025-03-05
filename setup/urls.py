@@ -21,6 +21,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('payment-infos/', PaymentInfoApi.as_view(), name='payment-infos'),
     path('products/', ProductApi.as_view(), name='products'),
-    path('update_server/', views.update, name='update'),
+    path('update_server/', views.update, name='update_server'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
