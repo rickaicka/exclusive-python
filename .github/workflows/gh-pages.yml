@@ -16,6 +16,6 @@ jobs:
         uses: umuttopalak/pythonanywhere-deploy-action@v1.1.0
         with:
           host: 'www.pythonanywhere.com'
-          username: 'ricardosalimd'
-          api_token: 'edb0d1413f54a67a909ff7d5c88e06a59b27efb2'
-          domain_name: 'https://ricardosalimd.pythonanywhere.com/exclusive-api'
+          username: {{secrets.USERNAME}}
+          api_token: {{secrets.API_TOKEN}}
+          domain_name: {{secrets.DOMAIN_NAME}}
