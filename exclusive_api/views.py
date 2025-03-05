@@ -9,7 +9,6 @@ from .models import Category, Product, User, PaymentInfo, Image, WishList
 from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, WishListSerializer
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from git import Repo
 
 @csrf_exempt
 def update(request):
@@ -19,7 +18,7 @@ def update(request):
         stored on PythonAnywhere in the git.Repo() as parameter.
         Here the name of my directory is "test.pythonanywhere.com"
         '''
-        repo = Repo("")
+        repo = git.Repo("ricardosalimd.pythonanywhere.com/")
         origin = repo.remotes.origin
         origin.pull()
         return HttpResponse("Updated code on PythonAnywhere")
