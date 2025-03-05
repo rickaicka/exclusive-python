@@ -18,13 +18,13 @@ router.register('images', ImageViewSet, basename='Image')
 #router.register('payment_infos/', PaymentInfoViewSet, basename='PaymentInfo')
 
 router.register('wish_list', WishListViewSet, basename='WishList')
-router.register('update_server', views.update, basename='UpdateServer')
+router.register('update_server', update.as_view(), basename='UpdateServer')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('payment-infos/', PaymentInfoApi.as_view(), name='payment-infos'),
     path('products/', ProductApi.as_view(), name='products'),
     path('wish-list/', WishListApi.as_view(), name='wish-list'),
-    path("update_server/", views.update, name="update"),
+    path("update_server/", update.as_view(), name="update"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
