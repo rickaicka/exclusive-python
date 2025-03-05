@@ -1,19 +1,16 @@
-name: GitHub Pages
-
-on:
-  push:
-    branches:
-      - master
-
+name: Deploy pythonanywhere webapp
+on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        if: success()
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Re-Deploy Pythonanywhere Django API
         uses: umuttopalak/pythonanywhere-deploy-action@v1.1.0
         with:
-          host: 'www.pythonanywhere.com'
-          username: 'ricardosalimd'
-          api_token: 'edb0d1413f54a67a909ff7d5c88e06a59b27efb2'
-          domain_name: 'https://ricardosalimd.pythonanywhere.com/'
+          host: 'www.pythonanywhere.com' or 'www.eu.pythonanywhere.com'
+          username: {{ secrets.USERNAME }}
+          api_token: {{ secrets.API_TOKEN }}
+          domain_name: {{ secrets.DOMAIN_NAME }}
