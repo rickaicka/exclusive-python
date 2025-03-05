@@ -28,9 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost:4200',
     'https://rickaicka.github.io',
+    '*',
     'https://rickaicka.github.io/exclusive-angular/',
-    'https://ricardosalimd.pythonanywhere.com',
-    'ricardosalimd.pythonanywhere.com',
+    'https://ricardosalimd.pythonanywhere.com'
 ]
 
 
@@ -146,6 +146,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = ['*']
 CORS_ALLOW_METHODS = (
     "DELETE",
     "GET",
