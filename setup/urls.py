@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from exclusive_api.views import (
     CategoryViewSet, ProductViewSet, UserViewSet, PaymentInfoViewSet, WishListViewSet,
-    PaymentInfoApi, ImageViewSet, ProductApi, WishListApi,
+    PaymentInfoApi, ImageViewSet, ProductApi, WishListApi, ImageCategoryViewSet
 )
 
 router = routers.DefaultRouter()
@@ -14,6 +14,7 @@ router.register('categories', CategoryViewSet, basename='Category')
 router.register('products', ProductViewSet, basename='Product')
 router.register('users', UserViewSet, basename='User')
 router.register('images', ImageViewSet, basename='Image')
+router.register('category_images', ImageCategoryViewSet, basename='Category Image')
 #router.register('payment_infos/', PaymentInfoViewSet, basename='PaymentInfo')
 router.register('wish_list', WishListViewSet, basename='WishList')
 urlpatterns = [

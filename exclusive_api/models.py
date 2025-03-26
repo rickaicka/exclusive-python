@@ -5,12 +5,22 @@ from django import forms
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='Categoria')
-
     class Meta:
         ordering = ["id"]
 
     def __str__(self):
         return self.name
+
+class ImageCategory(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Nome', blank=True, default=None, null=True)
+    image = models.FileField(upload_to='categories/', verbose_name='Imagem', blank=True, default=None, null=True)
+    category = models.OneToOneField('Category', on_delete=models.CASCADE, related_name='image', verbose_name='Categoria', blank=False, default=None, null=False)
+
+    class Meta:
+        ordering = ["id", "category", "image"]
+
+    def __str__(self):
+        return f'{self.category.name} - {self.image}'
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nome')

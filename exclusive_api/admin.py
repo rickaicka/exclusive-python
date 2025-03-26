@@ -2,15 +2,27 @@ from itertools import product
 
 from django.contrib import admin
 from unicodedata import category
-from .models import Category, Product, User, PaymentInfo, Image, WishList
+from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
 
 
 class Categories(admin.ModelAdmin):
-    list_display = ('id','name')
+    list_display = ('id','name', 'get_images_by_category')
+    def get_images_by_category(self, obj):
+        image = ImageCategory.objects.filter(category=obj.id)
+        return ", ".join([image.image.name for image in image])
+    get_images_by_category.short_description = 'Imagens'
+    get_images_by_category.admin_order_field = 'images'
     list_display_links = ('id', 'name')
-    search_fields = ('name', 'products',)
+    search_fields = ('name', 'category',)
     list_per_page = 20
 admin.site.register(Category, Categories)
+
+class ImagesCategory(admin.ModelAdmin):
+    list_display = ('id','name', 'image')
+    list_display_links = ('id', 'name', 'image')
+    search_fields = ('name', 'image')
+    list_per_page = 20
+admin.site.register(ImageCategory, ImagesCategory)
 
 class Images(admin.ModelAdmin):
     list_display = ('id','name', 'image')

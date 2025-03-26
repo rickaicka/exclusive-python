@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os.path
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,10 +88,10 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ricardosalimd$exclusive_db',
-        'USER': 'ricardosalimd',
-        'PASSWORD': 'F#Eg48%hk^2zNz',
-        'HOST': 'ricardosalimd.mysql.pythonanywhere-services.com',
+        'NAME': 'exclusive_db',
+        'USER': 'admin_user',
+        'PASSWORD': 'R9dXrfA%%c$6',
+        'HOST': 'localhost',
         'PORT': '3306'
     }
 }
@@ -162,3 +163,17 @@ CORS_ALLOW_HEADERS = (
     "x-csrftoken",
     "x-requested-with",
 )
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}

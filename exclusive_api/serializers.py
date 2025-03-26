@@ -1,10 +1,27 @@
 from rest_framework import serializers
-from .models import Category, Product, User, PaymentInfo, Image, WishList
+from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
+import logging
+
+logger = logging.getLogger(__name__)
+
+class ImageCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageCategory
+        fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
+    image = ImageCategorySerializer(many=False, read_only=True)
+    upload_image = serializers.FileField(max_length=100000, allow_empty_file=False, use_url=False),
     class Meta:
         model = Category
         fields = '__all__'
+
+    def create(self, validated_data):
+        upload_image = validated_data.pop('upload_image')
+        category = Category.objects.create(**validated_data)
+        for category in upload_images:
+            ImageCategory.objects.create(category=category, image=image)
+        return category
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
