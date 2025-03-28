@@ -1,16 +1,32 @@
+from email.policy import default
+
 from django.db import models
 from django import forms
+
+import logging
+
+logger = logging.getLogger('django')
 
 # Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='Categoria')
-
     class Meta:
         ordering = ["id"]
 
     def __str__(self):
         return self.name
+
+class ImageCategory(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Nome', blank=True, default=None, null=True)
+    image = models.FileField(upload_to='categories/', verbose_name='Imagem', blank=True, default=None, null=True)
+    category = models.OneToOneField('Category', on_delete=models.CASCADE, related_name='image', verbose_name='Categoria', blank=False, default=None, null=False)
+
+    class Meta:
+        ordering = ["id", "category", "image"]
+
+    def __str__(self):
+        return f'{self.category.name} - {self.image}'
 
 class Product(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nome')
@@ -20,10 +36,15 @@ class Product(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1, verbose_name='Avaliação', blank=True, default=None, null=True)
     size = models.CharField(max_length=100, verbose_name='Tamanho', blank=True, default=None, null=True)
     color = models.CharField(max_length=100, verbose_name='Cor', blank=True, default=None, null=True)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Desconto', blank=True, default=None, null=True)
 
     @property
     def images(self):
         return self.imagens.all()
+
+    @property
+    def categories_list(self):
+        return self.categories.all()
 
     class Meta:
         ordering = ["id",]
@@ -34,7 +55,7 @@ class Product(models.Model):
 class Image(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nome', blank=True, default=None, null=True)
     image = models.FileField(upload_to='products/', verbose_name='Imagem', blank=True, default=None, null=True)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='imagens', verbose_name='Produto', blank=False, default=None, null=False)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='imagens', verbose_name='Produto', blank=True, default=None, null=True)
     class Meta:
         ordering = ["id",]
 
