@@ -5,6 +5,9 @@ from itertools import product
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView, Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from unicodedata import category
+
+from .formatters.fields import IntListAsTextField
 from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
 from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, WishListSerializer, ImageCategorySerializer
 from django.shortcuts import get_object_or_404
@@ -99,6 +102,8 @@ class ProductApi(APIView):
                 rating=serializer.validated_data.get('rating'),
                 size=serializer.validated_data.get('size'),
                 color=serializer.validated_data.get('color'),
+                discount=serializer.validated_data.get('discount'),
+                categories_list=serializer.validated_data.get('categories_list')
             )
             product.save()
             product_serializer = ProductSerializer(product, many=False)
