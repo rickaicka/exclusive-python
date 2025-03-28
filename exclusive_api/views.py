@@ -7,7 +7,6 @@ from rest_framework.views import APIView, Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from unicodedata import category
 
-from .formatters.fields import IntListAsTextField
 from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
 from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, WishListSerializer, ImageCategorySerializer
 from django.shortcuts import get_object_or_404
