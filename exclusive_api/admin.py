@@ -1,8 +1,5 @@
-from itertools import product
-
 from django.contrib import admin
-from unicodedata import category
-from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
+from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory, Brand, Review, Tag
 
 
 class Categories(admin.ModelAdmin):
@@ -32,17 +29,29 @@ class Images(admin.ModelAdmin):
 admin.site.register(Image, Images)
 
 class Products(admin.ModelAdmin):
-    list_display = ('id','name', 'description', 'price', 'get_category', 'get_images_by_product')
+    list_display = ('id','name', 'description', 'price', 'sizes', 'colors', 'discount', 'brand', 'get_category', 'get_images_by_product', 'stock_quantity', 'get_reviews', 'get_tags', 'flashSales', 'bestSelling', 'highlight', 'active', 'isNew')
+
     def get_category(self, obj):
         return ", ".join([category.name for category in obj.categories.all()])
+
     def get_images_by_product(self, obj):
         images = Image.objects.filter(product=obj.id)
         return ", ".join([image.image.name for image in images])
+
+    def get_reviews(self, obj):
+        return ", ".join([review.review_text for review in obj.reviews.all()])
+
+    def get_tags(self, obj):
+        return ", ".join([tag.name for tag in obj.tags.all()])
 
     get_category.short_description = 'Categorias'
     get_category.admin_order_field = 'categories'
     get_images_by_product.short_description = 'Imagens'
     get_images_by_product.admin_order_field = 'images'
+    get_reviews.short_description = 'Reviews'
+    get_reviews.admin_order_field = 'reviews'
+    get_tags.short_description = 'Tags'
+    get_tags.admin_order_field = 'tags'
     list_display_links = ('id', 'name', )
     search_fields = ('name', 'description', 'price')
     list_per_page = 20
@@ -75,3 +84,21 @@ class WishLists(admin.ModelAdmin):
     search_fields = ('product',)
     list_per_page = 20
 admin.site.register(WishList, WishLists)
+
+class Brands(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    list_per_page = 20
+admin.site.register(Brand, Brands)
+
+class Reviews(admin.ModelAdmin):
+    list_display = ('id', 'review_text')
+    list_display_links = ('id', 'review_text')
+    list_per_page = 20
+admin.site.register(Review, Reviews)
+
+class Tags(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    list_per_page = 20
+admin.site.register(Tag, Tags)

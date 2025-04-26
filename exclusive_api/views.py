@@ -1,15 +1,14 @@
-from django.http import HttpResponse
-from gc import get_objects
-from itertools import product
-
 from rest_framework import viewsets, generics
 from rest_framework.views import APIView, Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from unicodedata import category
 
-from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory
-from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, WishListSerializer, ImageCategorySerializer
+from .models import Category, Product, User, PaymentInfo, Image, WishList, ImageCategory,Brand, Review, Tag
+from .serializers import CategorySerializer, ProductSerializer, UserSerializer, PaymentInfoSerializer, ImageSerializer, \
+    WishListSerializer, ImageCategorySerializer, BrandSerializer, ReviewSerializer, TagSerializer
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+
+
 #VIEWSET ROUTES
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -39,6 +38,19 @@ class ImageViewSet(viewsets.ModelViewSet):
 class WishListViewSet(viewsets.ModelViewSet):
     queryset = WishList.objects.all()
     serializer_class = WishListSerializer
+
+class BrandViewSet(viewsets.ModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
 
 #API ROUTES
 
@@ -86,11 +98,13 @@ class ImageApi(APIView):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class ProductApi(APIView):
+    @swagger_auto_schema(operation_description="Obtém uma lista de produtos.")
     def get(self, request):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
 
+    @swagger_auto_schema(operation_description="Salva um Produto")
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
@@ -99,10 +113,18 @@ class ProductApi(APIView):
                 description=serializer.validated_data.get('description'),
                 price=serializer.validated_data.get('price'),
                 rating=serializer.validated_data.get('rating'),
-                size=serializer.validated_data.get('size'),
-                color=serializer.validated_data.get('color'),
+                sizes=serializer.validated_data.get('sizes'),
+                colors=serializer.validated_data.get('colors'),
                 discount=serializer.validated_data.get('discount'),
-                categories_list=serializer.validated_data.get('categories_list')
+                categories_list=serializer.validated_data.get('categories_list'),
+                tags=serializer.validated_data.get('tags'),
+                stock_quantity=serializer.validated_data.get('stock_quantity'),
+                reviews=serializer.validated_data.get('reviews'),
+                active=serializer.validated_data.get('active'),
+                flashSales=serializer.validated_data.get('flashSales'),
+                bestSelling=serializer.validated_data.get('bestSelling'),
+                highlight=serializer.validated_data.get('highlight'),
+                brand=serializer.validated_data.get('brand')
             )
             product.save()
             product_serializer = ProductSerializer(product, many=False)
@@ -137,3 +159,21 @@ class WishListApi(APIView):
             wishlist_serializer.data['products'] = prods
             return Response(wishlist_serializer.data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class BrandApi(APIView):
+    def get(self, request):
+        brand = Brand.objects.all()
+        serializer = BrandSerializer(brand, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+class ReviewApi(APIView):
+    def get(self, request):
+        reviews = Review.objects.all()
+        serializer = ReviewSerializer(reviews, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+
+class TagApi(APIView):
+    def get(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)

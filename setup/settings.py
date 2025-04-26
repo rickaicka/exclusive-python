@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'exclusive_api',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -87,12 +88,12 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exclusive_db',
-        'USER': 'admin_user',
-        'PASSWORD': 'R9dXrfA%%c$6',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '5432'
     }
 }
 
